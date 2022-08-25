@@ -179,3 +179,61 @@ npm init @eslint/config
 3. Follow the instruction and anwser the question that eslint in asking you about the project to properly use the package. In this case I picked to follor **"standard rules"** for the project. At the end it will install a bunch of packages for your project.
 4. After it is done tiwh the instalation it will create an **".eslintrc.json"** file with the configuration for the project it will look in JSON or javascript or yaml you picked which one you want to use. Eslint asked you this during the question.
 5. Create a **".eslintignore"** file to avoid my build files and node modules files to be linted so I avoid this action using the .eslitignore. This will save some time when the eslint go and check the my code looking for errors.
+6. Teh current eslint file till the momento would look like this:
+```
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "standard-with-typescript",
+  ],
+  "overrides": [
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+  }
+}
+```
+7. Use prettir setup and config we need to install to plugin to be able to work with prettier and eslint, the dev dependencies are:
+```
+npm i -D eslint-config-prettier eslint-plugin-prettier
+```
+8. After setup prettier we need to start adding the configuration to be able to use our dev dependencies that we installed, We need to work in our **"eslint file"** and add the settings. The file will look like this:
+```
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended", // --> use eslint rules
+    "standard-with-typescript",
+    "plugin:prettier/recommended", // --> use our prettier configurations
+    "plugin:@typescript-eslint/recommended", // --> use the eslint for typescript
+    "plugin:import/errors", // --> use the eslint-plugin-import for error
+    "plugin:import/warnings", // --> use the eslint-plugin-import for warnings
+    "plugin:import/typescript"
+  ],
+  "overrides": [
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["prettier", "import", "@typescript-eslint"], // --> Add the plugins so our project can use the extended rules
+  "rules": {
+    "prettier/prettier":"error", // --> extra rules to say i want you use my prettier file for errors
+    "import/extensions":"off", // --> avoid extensions like when i import a files i dont need to use .js or .ts
+    "no-console":"off"
+  }
+}
+```
+9. (EXTRA) In case I want to use absolute routes instead of relative routes, I can install this couple of depencies that will help me to approach this. Just as a reminder a relative path is when we do an import and we wrote the path '../../routes/user.js' and We do not want to use that we want to use absolutes like '@src/routes/users'. We need to install the next dependencies.
+```
+npm i -D eslint-import-resolver-typescript tsconfig-paths
+```

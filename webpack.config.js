@@ -8,30 +8,32 @@ module.exports = {
   target: 'node',
   externals: [nodeExternals()],
   module: {
-    rules: [{
-      test: /\.tsx?$/,
-      use: 'ts-loader',
-      include: [path.resolve(__dirname, 'src')],
-      exclude: /node_modules/
-    }]
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        include: [path.resolve(__dirname, 'src')],
+        exclude: /node_modules/,
+      },
+    ],
   },
-  devServer: { //se utiliza para cuando quiere renderizar una vista, tengo un html dentro de dist
-    devMiddleware: { //generar codigo cuando compila
-      writeToDisk: true
+  // se utiliza para cuando quiere renderizar una vista, tengo un html dentro de dist
+  devServer: {
+    // generar codigo cuando compila
+    devMiddleware: {
+      writeToDisk: true,
     },
     static: {
-      directory: path.join(__dirname, 'dist')
+      directory: path.join(__dirname, 'dist'),
     },
-    port: 3000
+    port: 3000,
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'server.js'
+    filename: 'server.js',
   },
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
-  plugins: [
-    new NodemonPlugin()
-  ]
+  plugins: [new NodemonPlugin()],
 };
