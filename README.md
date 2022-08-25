@@ -139,3 +139,13 @@ module.exports = {
 ```
 
 ## Setup commitizen for standard commits to my repositories
+1. First install the package of commitizen using npm or yarn:
+```
+npm i -D commitizen
+```
+
+2. Make the repo comitizen friendly with the command: (Check commitizen docs)
+```
+commitizen init cz-conventional-changelog --save-dev --save-exact
+```
+3. To make a commit just use git cz and follow instructions after you did a git add .
