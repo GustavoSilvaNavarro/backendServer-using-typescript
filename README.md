@@ -149,3 +149,16 @@ npm i -D commitizen
 commitizen init cz-conventional-changelog --save-dev --save-exact
 ```
 3. To make a commit just use git cz and follow instructions after you did a git add .
+
+## Setup Eslint into my project
+1. Install the dev dependency for eslint with comand:
+```
+npm i -D eslint
+```
+2. Initialize a eslint project using the command:
+```
+npm init @eslint/config
+```
+3. Follow the instruction and anwser the question that eslint in asking you about the project to properly use the package. In this case I picked follor standard rules for the project. At the end it will install a bunch of packages for your project.
+4. After it is done tiwh the instalation it will create an eslintrc file with the configuration for the project it will look in JSON or javascript or yaml you picked which one you want to use. Eslint asked you this during the question.
+5. Create a .eslintignore file to avoid my build files and node modules files to be linted so I avoid this action using the .eslitignore. This will save some time when the eslint go and check the my code looking for errors.

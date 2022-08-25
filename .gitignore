@@ -1,7 +1,11 @@
 /package-lock.json
+coverage
 
 # Dependency directories
 /node_modules
 
 # Custom folders
 /dist
+
+# Enviromental Variables
+/.env
