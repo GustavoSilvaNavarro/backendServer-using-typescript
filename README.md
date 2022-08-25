@@ -274,8 +274,26 @@ npm i @typescript-eslint/parser -D
 npm i -D eslint-import-resolver-typescript tsconfig-paths
 ```
 
-## Setup Husky to check the code before any action
+## Setup Husky to get access to git hooks
 1. Install Husky as a dev dependency
 ```
 npm i -D husky
+```
+2. Initialize husky with the following comand:
+```
+npx husky-init && npm install
+```
+3. This will create a folder and a script for husky. **"husky folder"**. Inside you will find a file call pre-commit with your first git hook that you can use.
+4. Set up the git hooks pre commit to check for error in my code with eslint I use my script:
+```
+"lint": "eslint src", --> script
+npm run lint --> in husky
+```
+5. In case you want to add or create another git hook you can do it. Using the command:
+```
+npx husky add .husky/pre-commit "npm test" --> the npm test is as a example you can change it later
+```
+6. I created a hook to avoid long commits text
+```
+npx husky add .husky/commit-msg "npm test"
 ```
