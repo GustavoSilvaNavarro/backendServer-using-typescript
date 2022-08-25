@@ -233,7 +233,49 @@ npm i -D eslint-config-prettier eslint-plugin-prettier
   }
 }
 ```
-9. (EXTRA) In case I want to use absolute routes instead of relative routes, I can install this couple of depencies that will help me to approach this. Just as a reminder a relative path is when we do an import and we wrote the path '../../routes/user.js' and We do not want to use that we want to use absolutes like '@src/routes/users'. We need to install the next dependencies.
+9. In case you do not have the follow dependency you should added it to parser typescript rules. Add following command
+```
+npm i @typescript-eslint/parser -D
+```
+10. The **"eslint file"** would look like this:
+```
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "standard-with-typescript",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "overrides": [
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": ["tsconfig.json"]
+  },
+  "plugins": ["prettier", "import", "@typescript-eslint"],
+  "rules": {
+    "prettier/prettier":"error",
+    "import/extensions":"off",
+    "no-console":"off"
+  }
+}
+```
+11. (EXTRA) In case I want to use absolute routes instead of relative routes, I can install this couple of depencies that will help me to approach this. Just as a reminder a relative path is when we do an import and we wrote the path '../../routes/user.js' and We do not want to use that we want to use absolutes like '@src/routes/users'. We need to install the next dependencies.
 ```
 npm i -D eslint-import-resolver-typescript tsconfig-paths
+```
+
+## Setup Husky to check the code before any action
+1. Install Husky as a dev dependency
+```
+npm i -D husky
 ```

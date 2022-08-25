@@ -1,20 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express';
+import connectionToServer from './server/server';
 
-//INITIALIZATIONS
-const app = express();
+// INITIALIZATIONS
+const { app } = connectionToServer;
 
-//SETTINGS
-app.set('port', process.env.PORT || 3000);
-
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-  res.send('Everything good here, Hello World!!!');
-});
-
-app.get('/perro', (req: Request, res: Response, next: NextFunction) => {
-  res.send('Habe perro');
-});
-
-//SERVER
+// SERVER
 app.listen(app.get('port'), () => {
   console.log('Server on Port', app.get('port'));
 });
