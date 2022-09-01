@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
+import ProductMDB from '../../container/daos/products/productsMongo';
+
 // Get all Products
 export const getAllProductsData = (_req: Request, res: Response, next: NextFunction): void => {
   try {
@@ -10,9 +12,10 @@ export const getAllProductsData = (_req: Request, res: Response, next: NextFunct
 };
 
 // POST add new product to database
-export const addNewDataProduct = (_req: Request, res: Response, next: NextFunction): void => {
+export const addNewDataProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    res.status(200).send('Hello World!');
+    const idProduct = await ProductMDB.addProduct(req.body);
+    res.status(200).json({ id: idProduct });
   } catch (err) {
     next(err);
   }
