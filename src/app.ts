@@ -1,8 +1,11 @@
 import 'dotenv/config';
+
 import connectionToServer from './server/server';
+import { connectDB } from './db/dbMDB';
 
 // INITIALIZATIONS
 const { app } = connectionToServer;
+void connectDB();
 
 // SERVER
 app.listen(app.get('port'), () => {

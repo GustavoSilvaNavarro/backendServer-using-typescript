@@ -5,6 +5,7 @@
   "main": "./dist/server.js",
   "scripts": {
     "build": "webpack",
+    "clean": "del dist",
     "start": "node .",
     "lint": "eslint src",
     "start:dev": "start http://localhost:3000 && nodemon .",
