@@ -3,9 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import ProductMDB from '../../container/daos/products/productsMongo';
 
 // Get all Products
-export const getAllProductsData = (_req: Request, res: Response, next: NextFunction): void => {
+export const getAllProductsData = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    res.status(200).send('This is a get petition');
+    const allProducts = await ProductMDB.getAllProducts();
+    res.status(200).json(allProducts);
   } catch (err) {
     next(err);
   }
