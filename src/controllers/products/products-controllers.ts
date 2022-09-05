@@ -31,3 +31,13 @@ export const getOneProductData = async (req: Request, res: Response, next: NextF
     next(err);
   }
 };
+
+// PUT Update product by id
+export const updateDataProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const response = await ProductMDB.updateProduct(req.params.id, req.body);
+    res.status(200).send(response);
+  } catch (err) {
+    next(err);
+  }
+};

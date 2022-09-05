@@ -30,6 +30,21 @@ class ProductsMongo extends CrudContainerMongo {
     const err = new AppErrors('Collection type must be an string', 400);
     throw err;
   }
+
+  //! Update an alredy existing product by ID
+  async updateProduct(id: string, data: Product): Promise<string> {
+    if (env.productTipo !== undefined) {
+      if (Object.entries(data).length > 0) {
+        return await this.updateData(id, data, env.productTipo);
+      } else {
+        const err = new AppErrors('You need to provide product data to updated the collection', 400);
+        throw err;
+      }
+    }
+
+    const err = new AppErrors('Collection type must be an string', 400);
+    throw err;
+  }
 }
 
 export default new ProductsMongo();

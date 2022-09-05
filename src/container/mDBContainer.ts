@@ -4,7 +4,7 @@ import ProductModel from '../model/products-model';
 import { AppErrors } from '../utils/errors/allErrors';
 import { Product } from '../types/ecomTypes';
 
-// ? BASIC CRUD
+//! BASIC CRUD
 class CrudContainerMongo {
   //! CREATE NEW DATA
   async createNewData(data: AnyObject, collectionType: string): Promise<ObjectId> {
@@ -49,7 +49,37 @@ class CrudContainerMongo {
     throw err;
   }
 
-  // updateData(): void {}
+  //! Update data
+  async updateData(id: string, data: AnyObject, collectionType: string): Promise<string> {
+    if (collectionType === 'product') {
+      if (id !== undefined) {
+        if (isValidObjectId(id)) {
+          const product = await ProductModel.findById(id);
+          if (product !== null) {
+            Object.assign(product, data);
+            await product.save();
+
+            return `Product with ID: ${id} was updated!`;
+          } else {
+            const err = new AppErrors('Product was not found!', 400);
+            throw err;
+          }
+        } else {
+          const err = new AppErrors('The ID must be valid!', 400);
+          throw err;
+        }
+      } else {
+        const err = new AppErrors('Must have an ID to update the data', 400);
+        throw err;
+      }
+    } else if (collectionType === 'cart') {
+      // TODO: Create cart logic inside here
+      console.log(collectionType);
+    }
+
+    const err = new AppErrors('Collection type must be product or cart as a string type', 400);
+    throw err;
+  }
 
   // deleteData(): void {}
 }
