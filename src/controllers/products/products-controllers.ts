@@ -21,3 +21,13 @@ export const addNewDataProduct = async (req: Request, res: Response, next: NextF
     next(err);
   }
 };
+
+// Get one product data by id
+export const getOneProductData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const singleProduct = await ProductMDB.getAllProducts(req.params.id);
+    res.status(200).json(singleProduct);
+  } catch (err) {
+    next(err);
+  }
+};

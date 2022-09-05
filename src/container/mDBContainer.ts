@@ -1,4 +1,4 @@
-import { AnyObject, ObjectId } from 'mongoose';
+import { AnyObject, isValidObjectId, ObjectId } from 'mongoose';
 
 import ProductModel from '../model/products-model';
 import { AppErrors } from '../utils/errors/allErrors';
@@ -25,15 +25,24 @@ class CrudContainerMongo {
   }
 
   //! READ DATA
-  async readAllData(collectionType: string): Promise<Product[]> {
+  async readAllData(collectionType: string, id?: string): Promise<Product[] | Product> {
     let anyDataRead;
 
     if (collectionType === 'product') {
-      anyDataRead = await ProductModel.find({});
-    }
+      if (id !== undefined) {
+        if (isValidObjectId(id)) {
+          anyDataRead = await ProductModel.findById(id);
+        } else {
+          const err = new AppErrors('Please enter a valid ID', 400);
+          throw err;
+        }
+      } else {
+        anyDataRead = await ProductModel.find({});
+      }
 
-    if (anyDataRead !== null && anyDataRead !== undefined) {
-      return anyDataRead;
+      if (anyDataRead !== null) {
+        return anyDataRead;
+      }
     }
 
     const err = new AppErrors('Collection type only can be product or cart as a string type', 400);

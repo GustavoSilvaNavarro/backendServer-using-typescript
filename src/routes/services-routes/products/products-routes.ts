@@ -2,7 +2,7 @@
 import { Router } from 'express';
 
 import adminRoutes from './admin/admin-routes';
-import { getAllProductsData } from '../../../controllers/products/products-controllers';
+import { getAllProductsData, getOneProductData } from '../../../controllers/products/products-controllers';
 
 const router = Router();
 
@@ -10,8 +10,8 @@ const router = Router();
 // Get all Products
 router.get('/', getAllProductsData);
 
-// // Get one product data by id
-// router.get('/:id', getOneProductData);
+// Get one product data by id
+router.get('/:id', getOneProductData);
 
 // ADMIN ROUTES
 router.use('/', adminRoutes);

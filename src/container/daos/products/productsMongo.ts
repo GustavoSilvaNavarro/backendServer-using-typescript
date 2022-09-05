@@ -7,9 +7,14 @@ import { Product } from '../../../types/ecomTypes';
 
 class ProductsMongo extends CrudContainerMongo {
   //! Get all products
-  async getAllProducts(): Promise<Product[]> {
+  async getAllProducts(id?: string): Promise<Product[] | Product> {
     if (env.productTipo !== undefined) {
-      return await this.readAllData(env.productTipo);
+      if (id !== undefined) {
+        //! Get only one product from list
+        return await this.readAllData(env.productTipo, id);
+      } else {
+        return await this.readAllData(env.productTipo);
+      }
     }
 
     const err = new AppErrors('Collection type must be a string', 400);
