@@ -12,5 +12,5 @@ export interface CustomeError {
   name: string;
   status: number;
   stack?: string | undefined;
-  setError: () => OwnError;
+  setError?: () => OwnError;
 }

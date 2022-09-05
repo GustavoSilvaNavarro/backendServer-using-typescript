@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import morgan from 'morgan';
 
 import clientServices from '../routes/services-routes/service-api-routes';
+import { allErrorHandler } from '../middlewares/error-handler';
 
 // INITIALIZATIONS
 const app: Application = express();
@@ -18,5 +19,6 @@ app.use(morgan('dev'));
 app.use('/api', clientServices);
 
 // ERROR HANDLER
+app.use(allErrorHandler);
 
 export default { app };
