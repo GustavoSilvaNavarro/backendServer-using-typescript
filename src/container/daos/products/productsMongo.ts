@@ -45,6 +45,16 @@ class ProductsMongo extends CrudContainerMongo {
     const err = new AppErrors('Collection type must be an string', 400);
     throw err;
   }
+
+  //! Delete an existing product by ID
+  async deleteSingleProduct(id: string): Promise<string> {
+    if (env.productTipo !== undefined) {
+      return await this.deleteData(id, env.productTipo);
+    }
+
+    const err = new AppErrors('Collection type must be an string', 400);
+    throw err;
+  }
 }
 
 export default new ProductsMongo();

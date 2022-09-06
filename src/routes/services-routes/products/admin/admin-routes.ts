@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express';
 
-import { addNewDataProduct, updateDataProduct } from '../../../../controllers/products/products-controllers';
+import {
+  addNewDataProduct,
+  updateDataProduct,
+  deleteProduct,
+} from '../../../../controllers/products/products-controllers';
 
 const router = Router();
 
@@ -12,7 +16,7 @@ router.post('/', addNewDataProduct);
 // PUT Update product by id
 router.put('/:id', updateDataProduct);
 
-// // DELETE PRODUCT BY ID
-// router.delete('/:id', deleteProduct);
+// DELETE PRODUCT BY ID
+router.delete('/:id', deleteProduct);
 
 export default router;

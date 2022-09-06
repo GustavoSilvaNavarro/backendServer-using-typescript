@@ -41,3 +41,13 @@ export const updateDataProduct = async (req: Request, res: Response, next: NextF
     next(err);
   }
 };
+
+// DELETE PRODUCT BY ID
+export const deleteProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const result = await ProductMDB.deleteSingleProduct(req.params.id);
+    res.status(200).send(result);
+  } catch (err) {
+    next(err);
+  }
+};

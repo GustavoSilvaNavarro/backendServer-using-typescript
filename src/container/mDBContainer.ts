@@ -42,6 +42,9 @@ class CrudContainerMongo {
 
       if (anyDataRead !== null) {
         return anyDataRead;
+      } else {
+        const err = new AppErrors('Product not Found', 400);
+        throw err;
       }
     }
 
@@ -81,7 +84,34 @@ class CrudContainerMongo {
     throw err;
   }
 
-  // deleteData(): void {}
+  //! Delete data
+  async deleteData(id: string, collectionType: string): Promise<string> {
+    if (id !== undefined) {
+      if (isValidObjectId(id)) {
+        if (collectionType === 'product') {
+          const productDeleted = await ProductModel.findByIdAndDelete(id);
+
+          if (productDeleted !== null) {
+            return `Product with ID: ${id} was deleted!`;
+          }
+
+          const err = new AppErrors('Product not Found!', 400);
+          throw err;
+        } else if (collectionType === 'cart') {
+          // TODO: Logic to delete a cart
+        }
+
+        const err = new AppErrors('Collection type must be product or cart as strings types', 400);
+        throw err;
+      }
+
+      const err = new AppErrors('The ID must be valid!', 400);
+      throw err;
+    } else {
+      const err = new AppErrors('Need an ID to delete a product', 400);
+      throw err;
+    }
+  }
 }
 
 export default CrudContainerMongo;
