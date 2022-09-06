@@ -98,8 +98,14 @@ class CrudContainerMongo {
           const err = new AppErrors('Product not Found!', 400);
           throw err;
         } else if (collectionType === 'cart') {
-          // TODO: Logic to delete a cart
-          console.log(collectionType);
+          const cartDeleted = await CartModel.findByIdAndDelete(id);
+
+          if (cartDeleted !== null) {
+            return `Cart with ID: ${id} was deleted`;
+          }
+
+          const err = new AppErrors('Cart was not Found!', 400);
+          throw err;
         }
 
         const err = new AppErrors('Collection type must be product or cart as strings types', 400);

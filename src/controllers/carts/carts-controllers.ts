@@ -11,3 +11,13 @@ export const createNewCart = async (_req: Request, res: Response, next: NextFunc
     next(err);
   }
 };
+
+//! DELETE - Delete an specific cart by ID
+export const deleteSingleCart = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const response = await CartMDB.deleteCart(req.params.id);
+    res.status(200).send(response);
+  } catch (err) {
+    next(err);
+  }
+};

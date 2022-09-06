@@ -14,6 +14,16 @@ class CartMongo extends CrudContainerMongo {
     const err = new AppErrors('Collection type must be a string', 400);
     throw err;
   }
+
+  //! DELETE AN EXISTING SINGLE CART
+  async deleteCart(id: string): Promise<string> {
+    if (env.cartTipo !== undefined) {
+      return await this.deleteData(id, env.cartTipo);
+    }
+
+    const err = new AppErrors('Collection type must be a string', 400);
+    throw err;
+  }
 }
 
 export default new CartMongo();
