@@ -24,7 +24,7 @@ class ProductsMongo extends CrudContainerMongo {
   //! Insert new data product
   async addProduct(dataProduct: Product): Promise<ObjectId> {
     if (env.productTipo !== undefined) {
-      return await this.createNewData(dataProduct, env.productTipo);
+      return await this.createNewData(env.productTipo, dataProduct);
     }
 
     const err = new AppErrors('Collection type must be an string', 400);

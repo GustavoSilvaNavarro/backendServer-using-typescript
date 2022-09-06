@@ -7,13 +7,13 @@ import { getAllProductsData, getOneProductData } from '../../../controllers/prod
 const router = Router();
 
 // ROUTES
-// Get all Products
+//! Get all Products
 router.get('/', getAllProductsData);
 
-// Get one product data by id
+//! Get one product data by id
 router.get('/:id', getOneProductData);
 
-// ADMIN ROUTES
+//! ADMIN ROUTES
 router.use('/', adminRoutes);
 
 export default router;

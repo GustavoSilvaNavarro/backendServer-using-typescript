@@ -1,27 +1,27 @@
 import { AnyObject, isValidObjectId, ObjectId } from 'mongoose';
 
 import ProductModel from '../model/products-model';
+import CartModel from '../model/carts-model';
 import { AppErrors } from '../utils/errors/allErrors';
 import { Product } from '../types/ecomTypes';
 
 //! BASIC CRUD
 class CrudContainerMongo {
   //! CREATE NEW DATA
-  async createNewData(data: AnyObject, collectionType: string): Promise<ObjectId> {
+  async createNewData(collectionType: string, data?: AnyObject): Promise<ObjectId> {
+    let newData;
+
     if (collectionType === 'product') {
-      const newData = new ProductModel(data);
-      await newData.save();
-      return newData._id;
+      newData = new ProductModel(data);
+    } else if (collectionType === 'cart') {
+      newData = new CartModel(data);
+    } else {
+      const err = new AppErrors('Collection type only takes product or cart as values', 400);
+      throw err;
     }
 
-    // if (collectionType === 'cart') {
-    //   const newData = new ProductModel(data);
-    //   await newData.save();
-    //   return newData._id;
-    // }
-
-    const err = new AppErrors('Collection type only takes product or cart as values', 400);
-    throw err;
+    await newData.save();
+    return newData._id;
   }
 
   //! READ DATA
