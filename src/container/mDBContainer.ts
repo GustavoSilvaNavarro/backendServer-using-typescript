@@ -43,7 +43,7 @@ class CrudContainerMongo {
       if (anyDataRead !== null) {
         return anyDataRead;
       } else {
-        const err = new AppErrors('Product not Found', 400);
+        const err = new AppErrors('Product was not Found', 400);
         throw err;
       }
     }
@@ -54,34 +54,34 @@ class CrudContainerMongo {
 
   //! Update data
   async updateData(id: string, data: AnyObject, collectionType: string): Promise<string> {
-    if (collectionType === 'product') {
-      if (id !== undefined) {
-        if (isValidObjectId(id)) {
+    if (id !== undefined) {
+      if (isValidObjectId(id)) {
+        if (collectionType === 'product') {
           const product = await ProductModel.findById(id);
           if (product !== null) {
             Object.assign(product, data);
             await product.save();
 
             return `Product with ID: ${id} was updated!`;
-          } else {
-            const err = new AppErrors('Product was not found!', 400);
-            throw err;
           }
-        } else {
-          const err = new AppErrors('The ID must be valid!', 400);
+
+          const err = new AppErrors('Product was not found!', 400);
           throw err;
+        } else if (collectionType === 'cart') {
+          // TODO: Create cart logic inside here
+          console.log(collectionType);
         }
+
+        const err = new AppErrors('Collection type must be product or cart as a string type', 400);
+        throw err;
       } else {
-        const err = new AppErrors('Must have an ID to update the data', 400);
+        const err = new AppErrors('The ID must be valid!', 400);
         throw err;
       }
-    } else if (collectionType === 'cart') {
-      // TODO: Create cart logic inside here
-      console.log(collectionType);
+    } else {
+      const err = new AppErrors('Must have an ID to update the data', 400);
+      throw err;
     }
-
-    const err = new AppErrors('Collection type must be product or cart as a string type', 400);
-    throw err;
   }
 
   //! Delete data
@@ -99,6 +99,7 @@ class CrudContainerMongo {
           throw err;
         } else if (collectionType === 'cart') {
           // TODO: Logic to delete a cart
+          console.log(collectionType);
         }
 
         const err = new AppErrors('Collection type must be product or cart as strings types', 400);
