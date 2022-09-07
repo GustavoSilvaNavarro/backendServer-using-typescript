@@ -3,11 +3,11 @@ import { ObjectId } from 'mongoose';
 import CrudContainerMongo from '../../mDBContainer';
 import { AppErrors } from '../../../utils/errors/allErrors';
 import env from '../../../utils/env/variables-env';
-import { Product } from '../../../types/ecomTypes';
+import { Product, Cart } from '../../../types/ecomTypes';
 
 class ProductsMongo extends CrudContainerMongo {
   //! Get all products
-  async getAllProducts(id?: string): Promise<Product[] | Product> {
+  async getAllProducts(id?: string): Promise<Product[] | Product | Cart[] | Cart> {
     if (env.productTipo !== undefined) {
       if (id !== undefined) {
         //! Get only one product from list
@@ -31,7 +31,7 @@ class ProductsMongo extends CrudContainerMongo {
     throw err;
   }
 
-  //! Update an alredy existing product by ID
+  //! Update an already existing product by ID
   async updateProduct(id: string, data: Product): Promise<string> {
     if (env.productTipo !== undefined) {
       if (Object.entries(data).length > 0) {

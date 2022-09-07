@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express';
 
-import { createNewCart, deleteSingleCart } from '../../../controllers/carts/carts-controllers';
+import { createNewCart, deleteSingleCart, addProductsToCart } from '../../../controllers/carts/carts-controllers';
 
 const router = Router();
 
@@ -13,7 +13,9 @@ router.post('/', createNewCart);
 router.delete('/:id', deleteSingleCart);
 
 //! GET - All products from an specific cart by ID
-//! POST - Add an specific to an specific cart by ID
+//! PUT - Add an specific Product by ID to an specific Cart by ID
+router.put('/:idCart/products/:idProduct', addProductsToCart);
+
 //! DELETE - Create new cart
 
 export default router;

@@ -21,3 +21,13 @@ export const deleteSingleCart = async (req: Request, res: Response, next: NextFu
     next(err);
   }
 };
+
+//! PUT - Add an specific Product by ID to an specific Cart by ID
+export const addProductsToCart = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const response = await CartMDB.addSingleProductToCart(req.params.idCart, req.params.idProduct);
+    res.status(200).send(response);
+  } catch (err) {
+    next(err);
+  }
+};

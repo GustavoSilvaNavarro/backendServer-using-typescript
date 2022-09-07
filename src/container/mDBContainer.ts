@@ -3,7 +3,7 @@ import { AnyObject, isValidObjectId, ObjectId } from 'mongoose';
 import ProductModel from '../model/products-model';
 import CartModel from '../model/carts-model';
 import { AppErrors } from '../utils/errors/allErrors';
-import { Product } from '../types/ecomTypes';
+import { Product, Cart } from '../types/ecomTypes';
 
 //! BASIC CRUD
 class CrudContainerMongo {
@@ -25,7 +25,7 @@ class CrudContainerMongo {
   }
 
   //! READ DATA
-  async readAllData(collectionType: string, id?: string): Promise<Product[] | Product> {
+  async readAllData(collectionType: string, id?: string): Promise<Product[] | Product | Cart[] | Cart> {
     let anyDataRead;
 
     if (collectionType === 'product') {
@@ -33,7 +33,7 @@ class CrudContainerMongo {
         if (isValidObjectId(id)) {
           anyDataRead = await ProductModel.findById(id);
         } else {
-          const err = new AppErrors('Please enter a valid ID', 400);
+          const err = new AppErrors('Please enter a valid ID for Product', 400);
           throw err;
         }
       } else {
@@ -46,10 +46,28 @@ class CrudContainerMongo {
         const err = new AppErrors('Product was not Found', 400);
         throw err;
       }
-    }
+    } else if (collectionType === 'cart') {
+      if (id !== undefined) {
+        if (isValidObjectId(id)) {
+          anyDataRead = await CartModel.findById(id);
+        } else {
+          const err = new AppErrors('Please enter a valid ID for Cart', 400);
+          throw err;
+        }
+      } else {
+        anyDataRead = await CartModel.find({});
+      }
 
-    const err = new AppErrors('Collection type only can be product or cart as a string type', 400);
-    throw err;
+      if (anyDataRead !== null) {
+        return anyDataRead;
+      } else {
+        const err = new AppErrors('Cart was not Found', 400);
+        throw err;
+      }
+    } else {
+      const err = new AppErrors('Collection type only can be product or cart as a string type', 400);
+      throw err;
+    }
   }
 
   //! Update data
@@ -69,7 +87,16 @@ class CrudContainerMongo {
           throw err;
         } else if (collectionType === 'cart') {
           // TODO: Create cart logic inside here
-          console.log(collectionType);
+          const cart = await CartModel.findById(id);
+          if (cart !== null) {
+            Object.assign(cart, data);
+            await cart.save();
+
+            return `Cart with ID: ${id} was updated!`;
+          }
+
+          const err = new AppErrors('Cart was not found!', 400);
+          throw err;
         }
 
         const err = new AppErrors('Collection type must be product or cart as a string type', 400);

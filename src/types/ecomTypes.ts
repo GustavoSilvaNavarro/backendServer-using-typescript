@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongoose';
+import { Ref } from '@typegoose/typegoose';
 
 // ? Defining product object
 export interface Product {
@@ -11,7 +12,8 @@ export interface Product {
   stock: number;
 }
 
+// ? Defining cart object
 export interface Cart {
   _id?: ObjectId;
-  products?: ObjectId[];
+  products?: Array<Ref<Product>>;
 }
