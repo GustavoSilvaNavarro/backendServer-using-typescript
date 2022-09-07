@@ -6,6 +6,7 @@ import {
   deleteSingleCart,
   addProductsToCart,
   getAllProductsFromCart,
+  deleteSingleProduct,
 } from '../../../controllers/carts/carts-controllers';
 
 const router = Router();
@@ -23,6 +24,7 @@ router.get('/:idCart/products', getAllProductsFromCart);
 //! PUT - Add an specific Product by ID to an specific Cart by ID
 router.put('/:idCart/products/:idProduct', addProductsToCart);
 
-//! DELETE - Create new cart
+//! DELETE - Find specific Cart by ID and delete single product by ID
+router.delete('/:idCart/products/:idProduct', deleteSingleProduct);
 
 export default router;

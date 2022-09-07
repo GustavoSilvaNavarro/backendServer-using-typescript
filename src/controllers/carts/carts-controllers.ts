@@ -45,3 +45,13 @@ export const addProductsToCart = async (req: Request, res: Response, next: NextF
     next(err);
   }
 };
+
+//! DELETE - Find specific Cart by ID and delete single product by ID
+export const deleteSingleProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const response = await CartMDB.deleteOneProductFromCart(req.params.idCart, req.params.idProduct);
+    res.status(200).send(response);
+  } catch (err) {
+    next(err);
+  }
+};

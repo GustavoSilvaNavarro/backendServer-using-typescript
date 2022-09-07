@@ -86,6 +86,36 @@ class CartMongo extends CrudContainerMongo {
     const err = new AppErrors('Collection type must be a string', 400);
     throw err;
   }
+
+  //! DELETE SINGLE PRODUCT BY SPECIFIC ID FROM AN SPECIFIC CART ID
+  async deleteOneProductFromCart(idCart: string, idProduct: string): Promise<string> {
+    if (env.cartTipo !== undefined && env.productTipo !== undefined) {
+      const productToDelete = await this.readAllData(env.productTipo, idProduct);
+      const selectedCart = await this.readAllData(env.cartTipo, idCart);
+
+      if (productToDelete !== null && selectedCart !== null) {
+        // TODO - Verify that the product is in that list
+        const productExists = await CartModel.where('_id').equals(idCart).where('products').equals(idProduct).count();
+
+        if (productExists > 0) {
+          await CartModel.findByIdAndUpdate(idCart, { $pull: { products: { $in: [idProduct] } } }, { new: true });
+          return `Product with ID: ${idProduct}, was deleted from the cart with ID: ${idCart}`;
+        } else {
+          const err = new AppErrors(
+            `Product with ID: ${idProduct} can not be deleted because is not in the Cart with ID: ${idCart}`,
+            400
+          );
+          throw err;
+        }
+      } else {
+        const err = new AppErrors('Product or Cart was not Found!', 400);
+        throw err;
+      }
+    }
+
+    const err = new AppErrors('Collection type must be a string', 400);
+    throw err;
+  }
 }
 
 export default new CartMongo();
