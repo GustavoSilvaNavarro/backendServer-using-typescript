@@ -3,7 +3,6 @@ import { AnyObject, isValidObjectId, ObjectId } from 'mongoose';
 import ProductModel from '../model/products-model';
 import CartModel from '../model/carts-model';
 import { AppErrors } from '../utils/errors/allErrors';
-import { Product, Cart } from '../types/ecomTypes';
 
 //! BASIC CRUD
 class CrudContainerMongo {
@@ -25,7 +24,7 @@ class CrudContainerMongo {
   }
 
   //! READ DATA
-  async readAllData(collectionType: string, id?: string): Promise<Product[] | Product | Cart[] | Cart> {
+  async readAllData(collectionType: string, id?: string): Promise<AnyObject> {
     let anyDataRead;
 
     if (collectionType === 'product') {

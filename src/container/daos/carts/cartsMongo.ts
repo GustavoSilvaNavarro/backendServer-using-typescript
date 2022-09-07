@@ -1,9 +1,10 @@
-import { ObjectId } from 'mongoose';
+import { ObjectId, isValidObjectId, AnyObject } from 'mongoose';
 
 import CrudContainerMongo from '../../mDBContainer';
 import env from '../../../utils/env/variables-env';
 import { AppErrors } from '../../../utils/errors/allErrors';
 import CartModel from '../../../model/carts-model';
+import { Product } from '../../../types/ecomTypes';
 
 class CartMongo extends CrudContainerMongo {
   //! INSERT NEW EMPTY CART OF PRODUCTS
@@ -26,6 +27,35 @@ class CartMongo extends CrudContainerMongo {
     throw err;
   }
 
+  //! LIST ALL PRODUCTS FROM AN SPECIFIC CART
+  async listAllProductsFromCart(idCart: string): Promise<Product[] | AnyObject> {
+    if (idCart !== undefined) {
+      if (isValidObjectId(idCart)) {
+        const allProducts = await CartModel.findById(idCart, { products: 1, _id: 0 }).populate(
+          'products',
+          '-createdAt -updatedAt -__v -_id'
+        );
+        if (allProducts !== undefined || allProducts !== null) {
+          if (allProducts?.products !== undefined) {
+            return allProducts?.products;
+          } else {
+            const err = new AppErrors('Data bas failed to bring the data', 500);
+            throw err;
+          }
+        } else {
+          const err = new AppErrors('Cart was not Found!', 400);
+          throw err;
+        }
+      } else {
+        const err = new AppErrors('The ID provided must be valid', 400);
+        throw err;
+      }
+    } else {
+      const err = new AppErrors('Must provide an ID of a Cart to show all products', 400);
+      throw err;
+    }
+  }
+
   //! MODIFY CART TO ADD A NEW PRODUCT INTO LIST OF PRODUCTS INSIDE THE CART
   async addSingleProductToCart(idCart: string, idProduct: string): Promise<string> {
     if (env.cartTipo !== undefined && env.productTipo !== undefined) {
@@ -36,12 +66,10 @@ class CartMongo extends CrudContainerMongo {
         const productAlreadyOnList = await CartModel.find({
           $and: [{ _id: idCart }, { products: { $eq: idProduct } }],
         });
-        // const productAlreadyOnList = await CartModel.find({ products: { $eq: idProduct } });
 
         if (productAlreadyOnList.length <= 0) {
-          console.log(selectedCart);
-          return 'All great!';
-          // return await this.updateData(idCart, { products: [idProduct, '6310cdfb91f80552b85ed806'] }, env.cartTipo);
+          await this.updateData(idCart, { products: [...selectedCart.products, idProduct] }, env.cartTipo);
+          return `Product with ID: ${idProduct} was added to the Cart with ID: ${idCart}`;
         } else {
           const err = new AppErrors(
             `Item with ID: ${idProduct} already in the list, Update the amount instead of add same product to the cart with ID: ${idCart}!`,

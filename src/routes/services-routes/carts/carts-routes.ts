@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from 'express';
 
-import { createNewCart, deleteSingleCart, addProductsToCart } from '../../../controllers/carts/carts-controllers';
+import {
+  createNewCart,
+  deleteSingleCart,
+  addProductsToCart,
+  getAllProductsFromCart,
+} from '../../../controllers/carts/carts-controllers';
 
 const router = Router();
 
@@ -13,6 +18,8 @@ router.post('/', createNewCart);
 router.delete('/:id', deleteSingleCart);
 
 //! GET - All products from an specific cart by ID
+router.get('/:idCart/products', getAllProductsFromCart);
+
 //! PUT - Add an specific Product by ID to an specific Cart by ID
 router.put('/:idCart/products/:idProduct', addProductsToCart);
 
