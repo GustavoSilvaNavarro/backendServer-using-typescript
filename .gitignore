@@ -6,6 +6,7 @@ coverage
 
 # Custom folders
 /dist
+/.vscode
 
 # Enviromental Variables
 /.env
