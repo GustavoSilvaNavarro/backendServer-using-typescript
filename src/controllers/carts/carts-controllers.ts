@@ -26,10 +26,11 @@ export const deleteSingleCart = async (req: Request, res: Response, next: NextFu
 export const getAllProductsFromCart = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const response = await CartMDB.listAllProductsFromCart(req.params.idCart);
-    if (response.length > 0) {
-      res.status(200).json({ allProducts: response });
+
+    if (typeof response === 'object') {
+      res.status(200).json(response);
     } else {
-      res.status(200).send('Cart is empty!');
+      res.status(200).send(response);
     }
   } catch (err) {
     next(err);

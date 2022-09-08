@@ -1,10 +1,9 @@
-import { ObjectId, isValidObjectId, AnyObject } from 'mongoose';
+import { ObjectId, isValidObjectId, AnyObject, Types } from 'mongoose';
 
 import CrudContainerMongo from '../../mDBContainer';
 import env from '../../../utils/env/variables-env';
 import { AppErrors } from '../../../utils/errors/allErrors';
 import CartModel from '../../../model/carts-model';
-import { Product } from '../../../types/ecomTypes';
 
 class CartMongo extends CrudContainerMongo {
   //! INSERT NEW EMPTY CART OF PRODUCTS
@@ -28,26 +27,40 @@ class CartMongo extends CrudContainerMongo {
   }
 
   //! LIST ALL PRODUCTS FROM AN SPECIFIC CART
-  async listAllProductsFromCart(idCart: string): Promise<Product[] | AnyObject> {
+  async listAllProductsFromCart(idCart: string): Promise<AnyObject | string> {
     if (idCart !== undefined) {
       if (isValidObjectId(idCart)) {
-        const allProducts = await CartModel.findById(idCart, { products: 1, _id: 0 }).populate(
-          'products',
-          '-createdAt -updatedAt -__v -_id'
-        );
-        if (allProducts !== undefined || allProducts !== null) {
-          if (allProducts?.products !== undefined) {
-            return allProducts?.products;
+        const cartExist = await CartModel.find({ _id: idCart }, { _id: 1 });
+
+        if (cartExist.length > 0) {
+          const cartHasProducts = await CartModel.aggregate([
+            { $match: { _id: new Types.ObjectId(idCart) } },
+            { $project: { count: { $size: '$products' } } },
+          ]);
+
+          if (cartHasProducts[0].count > 0) {
+            // TODO -> GET PRODUCT LIST
+            const allProducts = await CartModel.findById(idCart, { products: 1, _id: 0 }).populate(
+              'products',
+              '-createdAt -updatedAt -__v -_id'
+            );
+
+            if (allProducts !== null) {
+              return allProducts;
+            } else {
+              const err = new AppErrors('Error rendering the list of products inside cart', 500);
+              throw err;
+            }
           } else {
-            const err = new AppErrors('Data bas failed to bring the data', 500);
-            throw err;
+            // TODO -> Sent the array is empty
+            return `Cart with ID: ${idCart} is empty`;
           }
         } else {
-          const err = new AppErrors('Cart was not Found!', 400);
+          const err = new AppErrors('The ID provided must be valid', 400);
           throw err;
         }
       } else {
-        const err = new AppErrors('The ID provided must be valid', 400);
+        const err = new AppErrors('Cart was not found!', 400);
         throw err;
       }
     } else {
