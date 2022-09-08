@@ -76,16 +76,16 @@ class CartMongo extends CrudContainerMongo {
       const selectedCart = await this.readAllData(env.cartTipo, idCart);
 
       if (productToAdd !== null && selectedCart !== null) {
-        const productAlreadyOnList = await CartModel.find({
-          $and: [{ _id: idCart }, { products: { $eq: idProduct } }],
-        });
+        // TODO -> Check that product is not in the list already
+        const productIsOnList = await CartModel.where('_id').equals(idCart).where('products').equals(idProduct).count();
 
-        if (productAlreadyOnList.length <= 0) {
-          await this.updateData(idCart, { products: [...selectedCart.products, idProduct] }, env.cartTipo);
+        if (productIsOnList <= 0) {
+          // TODO -> Add product since is not in the list
+          await CartModel.findByIdAndUpdate(idCart, { $push: { products: idProduct } }, { new: true });
           return `Product with ID: ${idProduct} was added to the Cart with ID: ${idCart}`;
         } else {
           const err = new AppErrors(
-            `Item with ID: ${idProduct} already in the list, Update the amount instead of add same product to the cart with ID: ${idCart}!`,
+            `Product with ID: ${idProduct} already in the list, Update the amount instead of add same product to the Cart with ID: ${idCart}!`,
             400
           );
           throw err;
