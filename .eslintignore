@@ -4,3 +4,4 @@ coverage
 .env
 webpack.config.js
 husky
+.vscode
