@@ -22,6 +22,8 @@
   },
   "plugins": ["prettier", "import", "@typescript-eslint"],
   "rules": {
+    "@typescript-eslint/strict-boolean-expressions": 0,
+    "@typescript-eslint/restrict-template-expressions": 0,
     "prettier/prettier":"error",
     "import/extensions":"off",
     "no-console":"off"
