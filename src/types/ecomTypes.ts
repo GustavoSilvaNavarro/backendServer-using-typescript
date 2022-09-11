@@ -17,3 +17,15 @@ export interface Cart {
   _id?: ObjectId;
   products?: Array<Ref<Product>>;
 }
+
+// ? Defining user object
+export interface User {
+  _id?: ObjectId;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  address: string;
+  age: number;
+  cellphone: string;
+}
