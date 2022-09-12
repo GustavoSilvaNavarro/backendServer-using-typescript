@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import UserModel from '../../model/users-model';
+import sendEmail from '../../utils/mails/mailer';
 import { UserType } from '../../types/ecomTypes';
 import { AppErrors } from '../../utils/errors/allErrors';
 import logger from '../../config/loggers/logger';
@@ -25,6 +26,24 @@ export const registerNewUserProcess = async (
 
     const newUser = new UserModel(user);
     await newUser.save();
+
+    const contentMessage = `
+      <h1>Welcome ${newUser.firstName} ${newUser.lastName}!</h1>
+      <p>Your New Account has been setup!</p>
+      <p>Your info account is</p>
+      <ul>
+        <li>User ID: ${newUser._id}</li>
+        <li>User email: ${newUser.email}</li>
+        <li>Contact: ${newUser.cellphone}</li>
+      </ul>
+    `;
+
+    await sendEmail({
+      from: 'test@gmail.com',
+      to: newUser.email,
+      subject: 'Please verify your account',
+      text: contentMessage,
+    });
 
     res.status(200).send('User was created');
   } catch (err) {
